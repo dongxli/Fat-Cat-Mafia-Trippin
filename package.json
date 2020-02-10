@@ -10,7 +10,7 @@
     "bootstrap": "^4.4.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "jquery": "^1.12.4",
+    "jquery": "^3.4.0",
     "mongoose": "^5.8.10",
     "react": "^16.12.0",
     "react-bootstrap": "^1.0.0-beta.16",
