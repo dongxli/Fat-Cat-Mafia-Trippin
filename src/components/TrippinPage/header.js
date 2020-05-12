@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 class Header extends Component {
   constructor(props) {
     super(props);
@@ -19,19 +18,25 @@ class Header extends Component {
   render() {
     return (
       <header>
-        <div className="head">
-          <h1>
+        <div className="head" >
+
+          <h1 style={{ textShadow: "1px 1px white" }}>
             We Design,
             <br /> You Travel
           </h1>
           <div>
-            <p>
+            <p style={{ textShadow: "1px 1px white", fontWeight: "bold" }}>
               We help you plan and schedule your perfect trip. So you can spend
               and enjoy your vacation time with friends and family
             </p>
             <div>
-              <a className="contact" href={this.state.page}>
-                Let's get started!
+              <a className="contact" href={this.state.page} style={{
+                color: "white",
+                textShadow: "1px 1px black",
+                backgroundColor: "#4a7199",
+                border: "2px solid black"
+              }}>
+                LET'S GET STARTED!
               </a>
             </div>
           </div>

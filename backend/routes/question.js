@@ -112,7 +112,8 @@ QUESTIONROUTES.route("/question/searchlocation").post((req, res) => {
              // endDate: res1.end_date,
              // destination: res1.destination,
              trip_id: res1.start_date,
-              user_locations: res1.trip_locations
+              user_locations: res1.trip_locations,
+              add_events: res1.event_locations
             });
           })
           .catch(e => {
@@ -157,6 +158,8 @@ QUESTIONROUTES.route("/question/eventlocation").post((req, res) => {
         const startDate = trips.start_date;
         const endDate = trips.end_date;
 
+        console.log("in eventlocation before fetch");
+
         if ((startDate.getMonth() + 1) < 10 || (startDate.getDate() + 1) < 10){
           if ((startDate.getMonth()+1) < 10 && (startDate.getDate()+1) < 10){
               selectStartDate = ((startDate.getFullYear() + "-" + "0"+ (startDate.getMonth()+1) + "-" + "0" + (startDate.getDate()+1)));
@@ -190,7 +193,7 @@ QUESTIONROUTES.route("/question/eventlocation").post((req, res) => {
         }
 
         const url = "https://app.ticketmaster.com/discovery/v2/events.json?sort=date,asc&startDateTime=" + selectStartDate + "T00:00:00Z&endDateTime=" + selectEndDate + "T00:00:00Z&size=200&radius=75&unit=miles&city=" + search_dest + "&apikey=" + tmApiKey;
-
+        console.log("right before fetch");
         fetch("https://app.ticketmaster.com/discovery/v2/events.json?sort=date,asc&startDateTime=" + selectStartDate + "T00:00:00Z&endDateTime=" + selectEndDate + "T00:00:00Z&size=200&radius=75&unit=miles&city=" + search_dest + "&apikey=" + tmApiKey)
         .then(res1 => res1.json())
         .then(json => {
@@ -206,8 +209,10 @@ QUESTIONROUTES.route("/question/eventlocation").post((req, res) => {
               questions: trips.questions,
               start_date: trips.start_date,
               end_date: trips.end_date,
-              event_list: events
+              event_list: events,
+              event_locations: events
             });
+            console.log("after got response");
         })
         .catch(err => {
             console.log(err);
@@ -223,7 +228,8 @@ QUESTIONROUTES.route("/question/eventlocation").post((req, res) => {
         }) 
       } else {
         res.status(400).json({
-          trip: null
+          trip: null,
+          event_locations: []
         })
       }
     })

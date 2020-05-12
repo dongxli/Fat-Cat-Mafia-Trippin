@@ -347,20 +347,26 @@ footer ul li a {
   div.services {
     display: grid;
     grid-template-columns: 1fr;
+    
   }
   div.services div {
     width: 70%;
+    color:rgb(53,128,134);
   }
 
   .services p.service-icon {
     font-size: 2.4rem;
     padding: 10px 30px;
     margin: 0px 0px 30px 0px;
+    color: rgb(53,128,134);
+    border-bottom: 2px solid rgb(53,128,134);
+    
   }
   .services p.service-title {
     font-size: 2.1rem;
     padding: 0;
     margin: 0;
+    
   }
 
   .services p:last-of-type {

@@ -18,8 +18,8 @@ class Main extends Component {
         <div>
           <div className="services" style={{}}>
             <div className="service-one">
-              <p className="service-icon">
-                <i className="far fa-calendar-alt"></i>
+              <p className="service-icon" >
+                <i className="far fa-calendar-alt" style={{ color: "rgb(53,128,134)" }}></i>
               </p>
               <p className="service-title" style={{ color: "#DC143C	" }}>
                 Planning
@@ -31,7 +31,7 @@ class Main extends Component {
             </div>
             <div className="service-two">
               <p className="service-icon">
-                <i className="fas fa-crop"></i>
+                <i className="fas fa-crop" style={{ color: "rgb(53,128,134)" }}></i>
               </p>
               <p className="service-title" style={{ color: "#DC143C	" }}>
                 Scheduling
@@ -42,7 +42,7 @@ class Main extends Component {
             </div>
             <div className="service-three">
               <p className="service-icon">
-                <i className="fas fa-code"></i>
+                <i className="fas fa-code" style={{ color: "rgb(53,128,134)" }}></i>
               </p>
               <p className="service-title" style={{ color: "#DC143C	" }}>
                 Collaborating

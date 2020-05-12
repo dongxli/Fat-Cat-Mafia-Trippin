@@ -70,7 +70,7 @@ class AppNavBar extends Component {
     const LOGGED_IN = (
       <Fragment>
         <UncontrolledDropdown nav inNavbar>
-          <DropdownToggle nav caret></DropdownToggle>
+          <DropdownToggle nav caret style={{ color: "white" }}></DropdownToggle>
           <DropdownMenu right>
             <DropdownItem href="/Home">HOME</DropdownItem>
             <DropdownItem href="/MyAccount">EDIT</DropdownItem>
@@ -125,13 +125,14 @@ class AppNavBar extends Component {
               <span
                 style={{
                   color: "#fff",
-                  fontFamily: "arial",
+                  fontFamily: "helvetica, arial",
                   fontWeight: "bold",
                   fontSize: "20px",
-                  letterSpacing: "1px",
+                  letterSpacing: "3px",
+                  textShadow: "1.25px 1.25px #4a7199"
                 }}
               >
-                Trippin
+                TRIPPIN
               </span>
               <NavbarToggler onClick={this.toggle} />
               <Collapse

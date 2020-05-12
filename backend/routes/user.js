@@ -113,9 +113,10 @@ USERROUTES.route("/user/:id").put(function (req, res) {
     { _id: req.params.id },
     {
       $set: {
-        first_name: req.body.user.first_name,
-        last_name: req.body.user.last_name,
-        hometown: req.body.user.hometown,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        hometown: req.body.hometown,
+        image: req.body.image
       },
     }
   )

@@ -10,6 +10,7 @@ const tripSchema = new Schema({
   end_date: Date,
   trip_locations: Array,
   trip_locations_for_scheduling: Array,
+  event_locations: Array,
   days: Array,
   buddies: Array,
   posts: Array,

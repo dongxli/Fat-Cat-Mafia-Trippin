@@ -124,93 +124,64 @@ class FAQ extends Component {
                                     </Accordion.Collapse>
                                 </Card>
                             </Accordion>
-                            <div style={{ margin: "30px auto" }}>
+                            <div style={{ margin: "30px auto", width: "70%", minWidth: "70%" }}>
                                 <h5>FREQUENTLY ASKED QUESTIONS:</h5>
                                 <Accordion defaultActiveKey="0">
                                     <Card>
                                         <Card.Header>
                                             <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                                                QUESTION
+                                                Can I connect with my friends on Trippin?
                                         </Accordion.Toggle>
                                         </Card.Header>
                                         <Accordion.Collapse eventKey="0">
                                             <Card.Body>
-                                                ANSWER
+                                                Trippin allows you to find your friends (from the top menu) by sending and
+                                                accepting friend requests. From there, planning trips with your friends is easy!
                                         </Card.Body>
                                         </Accordion.Collapse>
                                     </Card>
                                     <Card>
                                         <Card.Header>
                                             <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                                                QUESTION
+                                                Can I create an itinerary for travelling outside of the U.S.?
                                         </Accordion.Toggle>
                                         </Card.Header>
                                         <Accordion.Collapse eventKey="1">
                                             <Card.Body>
-                                                ANSWER
+                                                Of course! Trippin works for global travel.
                                             </Card.Body>
                                         </Accordion.Collapse>
                                     </Card>
                                     <Card>
                                         <Card.Header>
                                             <Accordion.Toggle as={Button} variant="link" eventKey="2">
-                                                QUESTION
+                                                How does Trippin make travel planning easier?
                                         </Accordion.Toggle>
                                         </Card.Header>
                                         <Accordion.Collapse eventKey="2">
                                             <Card.Body>
-                                                ANSWER
+                                                Trippin allows you to find all the restaurants, attractions and events that interest you
+                                                all from one place. Also, Trippin makes it easy to plan trips with others by allowing each
+                                                traveller to be a part of the planning. Post your comments and create polls to get everyone's
+                                                input.
                                             </Card.Body>
                                         </Accordion.Collapse>
                                     </Card>
                                     <Card>
                                         <Card.Header>
                                             <Accordion.Toggle as={Button} variant="link" eventKey="3">
-                                                QUESTION
+                                                Can I share my itinerary with others that are not on Trippin?
                                         </Accordion.Toggle>
                                         </Card.Header>
                                         <Accordion.Collapse eventKey="3">
                                             <Card.Body>
-                                                ANSWER
+                                                Trippin allows you to create a pdf of your itinerary that will be emailed to you and is yours to share!
                                         </Card.Body>
                                         </Accordion.Collapse>
                                     </Card>
-                                    <Card>
-                                        <Card.Header>
-                                            <Accordion.Toggle as={Button} variant="link" eventKey="4">
-                                                QUESTION
-                                        </Accordion.Toggle>
-                                        </Card.Header>
-                                        <Accordion.Collapse eventKey="4">
-                                            <Card.Body>
-                                                ANSWER
-                                            </Card.Body>
-                                        </Accordion.Collapse>
-                                    </Card>
-                                    <Card>
-                                        <Card.Header>
-                                            <Accordion.Toggle as={Button} variant="link" eventKey="5">
-                                                QUESTION
-                                        </Accordion.Toggle>
-                                        </Card.Header>
-                                        <Accordion.Collapse eventKey="5">
-                                            <Card.Body>
-                                                ANSWER
-                                            </Card.Body>
-                                        </Accordion.Collapse>
-                                    </Card>
-                                    <Card>
-                                        <Card.Header>
-                                            <Accordion.Toggle as={Button} variant="link" eventKey="6">
-                                                QUESTION
-                                        </Accordion.Toggle>
-                                        </Card.Header>
-                                        <Accordion.Collapse eventKey="6">
-                                            <Card.Body>
-                                                ANSWER
-                                            </Card.Body>
-                                        </Accordion.Collapse>
-                                    </Card>
+
+
+
                                 </Accordion>
                             </div>
 

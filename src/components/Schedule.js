@@ -29,12 +29,17 @@ class Schedule extends Component {
       trip_id: this.props.match.params.id,
       trip_locations: [],
       trip_location_elements: [],
+      trip_event_elements:[],
+      event_locations: [],
 
+      startDate: null,
+      endDate: null,
       days: [],
       days_elements: [],
       daylist: [],
       days_miles: [],
-      loading: true
+      loading: true,
+      event_days_elements: []
     };
     this.onDragEnd = this.onDragEnd.bind(this);
   }
@@ -43,13 +48,25 @@ class Schedule extends Component {
     app.get("tripinfo/" + this.state.trip_id)
       .then(res => {
         this.setState({ days_miles: res.data.trip.days_miles });
-        this.setState({ trip_locations: res.data.trip.trip_locations });
+        this.setState({ trip_locations: res.data.trip.trip_locations, 
+          event_locations: res.data.trip.event_locations });
+
+     //   console.log(this.state.event_locations);
+     //   console.log(this.state.trip_locations);
+     //   console.log(res.data.trip.start_date);
+     //   console.log(res.data.trip.end_date);
         this.setState({
           trip_location_elements: this.getUserLocationsDroppable(
             this.createList(this.state.trip_locations)
+          ),
+          trip_event_elements: this.getUserEventsDroppable(
+            this.createEvent(this.state.event_locations)
           )
         });
-        this.setState({ days: res.data.trip.days });
+        this.setState({ days: res.data.trip.days,
+          startDate: res.data.trip.start_date,
+          endDate: res.data.trip.end_date  
+        });
         this.setState({
           days_elements: this.getDaysDroppable(this.state.days)
         });
@@ -65,17 +82,25 @@ class Schedule extends Component {
     app.post("tripinfo/updateschedule", {
       trip_id: this.state.trip_id,
       days: this.state.days,
-      trip_locations: this.state.trip_locations
+      trip_locations: this.state.trip_locations,
+      event_locations: this.state.event_locations
     })
       .then(res => {
         this.setState({ days_miles: res.data.trip.days_miles });
-        this.setState({ trip_locations: res.data.trip.trip_locations });
+        this.setState({ trip_locations: res.data.trip.trip_locations,
+        event_location: res.data.trip.event_locations });
         this.setState({
           trip_location_elements: this.getUserLocationsDroppable(
             this.createList(this.state.trip_locations)
+          ),
+          trip_event_elements: this.getUserEventsDroppable(
+            this.createEvent(this.state.event_locations)
           )
         });
-        this.setState({ days: res.data.trip.days });
+        this.setState({ days: res.data.trip.days, 
+          startDate: res.data.trip.start_date,
+          endDate: res.data.trip.end_date
+         });
         this.setState({
           days_elements: this.getDaysDroppable(this.state.days)
         });
@@ -128,7 +153,7 @@ class Schedule extends Component {
                           textOverflow: "ellipsis"
                         }}
                       >
-                        <span>{list[i].name}</span>
+                       <b><span>{list[i].name}</span></b>
                       </div>
                       <ul className="list-unstyled list-inline rating mb-0">
                         {this.getRatingStar(list[i].rating)}
@@ -179,6 +204,116 @@ class Schedule extends Component {
     }
     return elements;
   }
+
+  /*--------------------------------------------------------------------------------------------------*/
+  createEvent(list) {
+    let elements = [];
+    for (let i = 0; i < list.length; i++) {
+      elements.push(
+        <Draggable draggableId={i.toString()} index={i} key={i}>
+          {provided => (
+            <div
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              className="draggable"
+            >
+              <div className="card">
+                <div className="row no-gutters">
+                  <div
+                    className="col-auto"
+                    style={{
+                      marginTop: "8px",
+                      marginLeft: "8px"
+                    }}
+                  >
+                    <img
+                      src={list[i].images[0].url}
+                      className="img-fluid"
+                      alt=""
+                      style={{
+                        height: "40px",
+                        width: "40px",
+                        borderRadius: "50%"
+                      }}
+                    />
+                  </div>
+                  <div className="col">
+                    <div className="card-block px-2">
+                      <div
+                        className="card-text"
+                        style={{
+                          // fontSize: "18px",
+                          textOverflow: "ellipsis",
+                          color: "blue"
+                        }}
+                      >
+                        <b><span>{list[i].name}</span></b>
+                      </div>
+                     
+                     <b>
+                      <span
+                        className="card-text"
+                        style={{
+                          display: "inline-block",
+                          float: "left",
+                          clear: "left",
+                          fontSize: "10px"
+                        }}
+                      >
+                        {list[i].dates.start.localDate} • {list[i].dates.start.localTime}
+                      </span>
+                    </b>
+                      <span
+                        className="card-text"
+                        style={{
+                          display: "inline-block",
+                          float: "left",
+                          clear: "left",
+                          fontSize: "10px"
+                        }}
+                      >
+                        {list[i]._embedded.venues[0].name}
+                      </span>
+
+                      <span
+                        className="card-text"
+                        style={{
+                          display: "inline-block",
+                          float: "left",
+                          clear: "left",
+                          fontSize: "10px"
+                        }}
+                      >
+                        {list[i]._embedded.venues[0].address.line1}
+                      </span>
+
+                      <span
+                        className="card-text"
+                        style={{
+                          display: "inline-block",
+                          float: "left",
+                          clear: "left",
+                          fontSize: "10px"
+                        }}
+                      >
+                        {list[i]._embedded.venues[0].city.name} {", "} {list[i]._embedded.venues[0].state.stateCode}
+                        {" "} {list[i]._embedded.venues[0].postalCode}
+                      </span>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {provided.placeholder}
+            </div>
+          )}
+        </Draggable>
+      );
+    }
+    return elements;
+  }
+  /*--------------------------------------------------------------------------------------------------*/
 
   getRatingStar(num) {
     let whole = 0;
@@ -240,10 +375,47 @@ class Schedule extends Component {
     );
   }
 
+  getUserEventsDroppable(list) {
+    return (
+      <Droppable droppableId="eventlist">
+        {(provided, snapshot) => (
+          <div
+            ref={provided.innerRef}
+            style={{
+              width: "250px",
+              minHeight: "100px",
+              maxHeight: "1000px",
+              backgroundColor: "#DEE7ED",
+              paddingBottom: "5px",
+              borderRadius: "5px"
+            }}
+          >
+            <div
+              style={{
+                marginLeft: "10px",
+                paddingTop: "5px",
+                fontFamily: "Roboto, sans-serif",
+                fontSize: "16px"
+              }}
+            >
+              My Events
+            </div>
+            {list}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    );
+  }
+
   getDaysDroppable(daysList) {
+    let get_start = new Date(this.state.startDate);
+    var get_month = (get_start.getMonth() + 1);
+    var get_date =  (get_start.getDate() + 1);
+    var get_year =  get_start.getFullYear();
+
     const elements = [];
     for (let i = 0; i < daysList.length; i++) {
-      {
         elements.push(
           <div style={{ flex: "1" }} key={i}>
             <Droppable droppableId={i.toString()}>
@@ -268,7 +440,7 @@ class Schedule extends Component {
                       fontSize: "16px"
                     }}
                   >
-                    Day {i + 1}
+                    Day {i + 1} • {get_month}{"/"}{get_date + i}{"/"}{get_year}
                     {this.state.days_miles &&
                       this.state.days_miles.length != 0 &&
                       this.state.days_miles[i] != 0 ? (
@@ -285,9 +457,89 @@ class Schedule extends Component {
                       ) : (
                         ""
                       )}
+                
                   </div>
-
+                  {this.state.event_locations.map((event, k) => (
+                   
+                     <div className="card">
+                      {(get_date+i) == (new Date(event.dates.start.localDate).getDate() + 1) ? (
+                      <div className="row no-gutters">
+                        <div
+                          className="col-auto"
+                          style={{
+                            marginTop: "8px",
+                            marginLeft: "8px"
+                          }}
+                        >
+                          <img
+                            src={event.images[0].url}
+                            className="img-fluid"
+                            alt=""
+                            style={{
+                              height: "40px",
+                              width: "40px",
+                              borderRadius: "50%"
+                            }}
+                          />
+                        </div>
+                        <div className="col">
+                                <div className="card-block px-2"
+                                >
+                                  <b><span className="card-text" style={{color: "blue"}}>{event.name}</span></b>
+                                  <span
+                                    className="card-text"
+                                    style={{
+                                      display: "inline-block",
+                                      float: "left",
+                                      clear: "left",
+                                      fontSize: "10px"
+                                    }}
+                                  >
+                                    {event.dates.start.localDate} • {event.dates.start.localTime}
+                                  </span>
+                                  <span
+                                    className="card-text"
+                                    style={{
+                                      display: "inline-block",
+                                      float: "left",
+                                      clear: "left",
+                                      fontSize: "10px"
+                                    }}
+                                  >
+                                    {event._embedded.venues[0].name}
+                                  </span>
+                                  <span
+                                    className="card-text"
+                                    style={{
+                                      display: "inline-block",
+                                      float: "left",
+                                      clear: "left",
+                                      fontSize: "10px"
+                                    }}
+                                  >
+                                    {event._embedded.venues[0].address.line1}
+                                  </span>
+                                  
+                                  <span
+                                    className="card-text"
+                                    style={{
+                                      display: "inline-block",
+                                      float: "left",
+                                      clear: "left",
+                                      fontSize: "10px"
+                                    }}
+                                  >
+                                    {event._embedded.venues[0].city.name} {", "} {event._embedded.venues[0].state.stateCode}
+                                    {" "} {event._embedded.venues[0].postalCode}
+                                  </span>
+                                </div>
+                        </div>
+                      </div> ):("")}
+                    </div>
+                  
+                  ))}
                   {this.state.days[i].map((item, index) => (
+      
                     <Draggable
                       key={item.id}
                       draggableId={item.id}
@@ -322,7 +574,7 @@ class Schedule extends Component {
                               </div>
                               <div className="col">
                                 <div className="card-block px-2">
-                                  <span className="card-text">{item.name}</span>
+                                  <b><span className="card-text">{item.name}</span></b>
                                   <ul className="list-unstyled list-inline rating mb-0">
                                     {this.getRatingStar(item.rating)}
                                     <span
@@ -374,7 +626,7 @@ class Schedule extends Component {
             </Droppable>
           </div>
         );
-      }
+    
     }
     return elements;
   }
@@ -385,9 +637,10 @@ class Schedule extends Component {
     }
 
     if (
-      result.source.droppableId == "userlist" &&
-      result.destination.droppableId == "userlist"
+      (result.source.droppableId == "userlist" &&
+      result.destination.droppableId == "userlist")
     ) {
+      console.log(result);
       this.state.trip_locations.splice(
         result.destination.index,
         0,
@@ -395,8 +648,7 @@ class Schedule extends Component {
       );
       this.setState({
         trip_location_elements: this.getUserLocationsDroppable(
-          this.createList(this.state.trip_locations)
-        )
+          this.createList(this.state.trip_locations))
       });
       return;
     } else if (
@@ -417,6 +669,7 @@ class Schedule extends Component {
       this.setState({
         days_elements: this.getDaysDroppable(this.state.days)
       });
+
     } else if (
       result.source.droppableId != "userlist" &&
       result.destination.droppableId == "userlist"
@@ -426,7 +679,6 @@ class Schedule extends Component {
         1
       );
       this.state.trip_locations.splice(result.destination.index, 0, item[0]);
-
       this.setState({
         trip_location_elements: this.getUserLocationsDroppable(
           this.createList(this.state.trip_locations)
@@ -435,9 +687,10 @@ class Schedule extends Component {
       this.setState({
         days_elements: this.getDaysDroppable(this.state.days)
       });
+
     } else if (
       result.source.droppableId != "userlist" &&
-      result.destination.droppableId !== "userlist"
+      result.destination.droppableId !== "userlist" 
     ) {
       let item = this.state.days[parseInt(result.source.droppableId)].splice(
         result.source.index,
@@ -448,7 +701,6 @@ class Schedule extends Component {
         0,
         item[0]
       );
-
       this.setState({
         trip_location_elements: this.getUserLocationsDroppable(
           this.createList(this.state.trip_locations)
@@ -457,7 +709,7 @@ class Schedule extends Component {
       this.setState({
         days_elements: this.getDaysDroppable(this.state.days)
       });
-    }
+    } 
   };
 
   render() {
@@ -479,12 +731,41 @@ class Schedule extends Component {
       </div>
     );
     return (
+      
       <div>
         {!this.state.loading ? (
           <DragDropContext onDragEnd={this.onDragEnd}>
-            <div style={{ width: "100%", height: "60px" }}>
+            <div style={{ width: "100%", height: "60px", display: "flex", justifyContent: "space-around", padding: "10px" }}>
               <Button
-                className="b"
+                style={{
+                  textShadow: "1px 1px black",
+                  borderRadius: "3px",
+                  backgroundColor: "#4a7199",
+                  border: "1px solid black"
+                }}
+                onClick={() => { window.location.href = "/trip/" + this.state.trip_id }}>
+                Trip Page
+              </Button>
+              <Button
+                style={{
+                  textShadow: "1px 1px black",
+                  borderRadius: "3px",
+                  backgroundColor: "#4a7199",
+                  border: "1px solid black"
+                }}
+
+                onClick={() => { window.location.href = "/trip/" + this.state.trip_id + "/recommendations" }}
+              >
+                Recommendations
+              </Button>
+              <Button
+
+                style={{
+                  textShadow: "1px 1px black",
+                  borderRadius: "3px",
+
+                  border: "1px solid black"
+                }}
                 variant="info"
                 onClick={this.updateSchedule}
               >
@@ -512,7 +793,7 @@ class Schedule extends Component {
                     {this.state.days_elements}
                   </div>
                 ) : (
-                    ""
+                    "" 
                   )}
               </div>
             </div>

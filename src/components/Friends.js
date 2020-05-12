@@ -32,8 +32,8 @@ class Friends extends Component {
           this.setState({ user_profile_image: './uploads/userProfileImage/' + response.data.user.image });
         }
       }).catch(function (error) {
-          console.log(error);
-    });
+        console.log(error);
+      });
 
     app
       .get("friend/" + JSON.parse(localStorage.getItem("user"))._id)
@@ -124,17 +124,18 @@ class Friends extends Component {
             <div className="card-info">
               {list[i].image ? (
                 <img
-                  src={require('./uploads/userProfileImage/'+`${list[i].image}`)}
+                  src={`http://trippinbucket.s3.amazonaws.com/${list[i].image}`}
+
                   alt="user"
                   className="profile-photo-lg"
                 />
               ) : (
-                <img
-                  src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                  alt="user"
-                  className="profile-photo-lg"
-                />
-              )}
+                  <img
+                    src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                    alt="user"
+                    className="profile-photo-lg"
+                  />
+                )}
 
               <div className="friend-info">
                 <span className="pull-right text-green">My Friend</span>
@@ -181,18 +182,20 @@ class Friends extends Component {
             <div className="card-info">
               {list[i].image ? (
                 <img
-                  src={require('./uploads/userProfileImage/'+`${list[i].image}`)}
+                  src={`http://trippinbucket.s3.amazonaws.com/${list[i].image}`}
+
                   alt="user"
                   className="profile-photo-lg"
                 />
               ) : (
-                <img
-                  //src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                  src={require('./uploads/userProfileImage/'+`${list[i].image}`)}
-                  alt="user"
-                  className="profile-photo-lg"
-                />
-              )}
+                  <img
+                    //src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                    src={`http://trippinbucket.s3.amazonaws.com/${list[i].image}`}
+
+                    alt="user"
+                    className="profile-photo-lg"
+                  />
+                )}
 
               <div className="friend-info">
                 <span
@@ -258,10 +261,11 @@ class Friends extends Component {
                     />
                   )} */}
                   {<img
-                      src={require(`${this.state.user_profile_image}`)}
-                      alt=""
-                      className="profile-photo-md"
-                    />}
+                    src={`http://trippinbucket.s3.amazonaws.com/${this.state.user_profile_image}`}
+
+                    alt=""
+                    className="profile-photo-md"
+                  />}
                   <Form.Group
                     style={{
                       display: "table-cell",
@@ -293,8 +297,8 @@ class Friends extends Component {
                     {this.state.search_message}
                   </Alert>
                 ) : (
-                  ""
-                )}
+                    ""
+                  )}
               </div>
             </div>
           </div>
@@ -311,8 +315,8 @@ class Friends extends Component {
                   Pending Friend Requests
                 </span>
               ) : (
-                <span></span>
-              )}
+                  <span></span>
+                )}
             </div>
             <div className="col-md-9"></div>
           </div>
@@ -333,8 +337,8 @@ class Friends extends Component {
                   My Friends
                 </span>
               ) : (
-                <span></span>
-              )}
+                  <span></span>
+                )}
             </div>
             <div className="col-md-9"></div>
           </div>

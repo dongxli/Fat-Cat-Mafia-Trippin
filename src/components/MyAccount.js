@@ -10,10 +10,12 @@ import Footer from "./TrippinPage/footer";
 export class MyAccount extends Component {
   constructor(props) {
     super(props);
+    this.handleSelectedFile = this.handleSelectedFile.bind(this);
+    this.handleUpload = this.handleUpload.bind(this);
     this.state = {
       editPhotoShow: false,
       option: '2',
-      image: "./uploads/userProfileImage/placeholder.png",
+      image: "placeholder.png",
       //image:"",
       id: "",
       email: "",
@@ -22,8 +24,8 @@ export class MyAccount extends Component {
       __v: "",
       hometown: "",
       updateflag: false,
-
-      multerImage: "./images/placeholder.png",
+      selectedFile: null,
+      multerImage: "./uploads/userProfileImage/placeholder.png",
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,7 +33,7 @@ export class MyAccount extends Component {
 
     if (JSON.parse(localStorage.getItem('user')).image == null) {
       this.state = {
-        image: "./uploads/userProfileImage/placeholder.png"
+        image: "placeholder.png"
       };
     }
     // else{
@@ -44,13 +46,13 @@ export class MyAccount extends Component {
     //   })
     // }
   };
-  setDefaultImage(uploadType) {
+  /* setDefaultImage(uploadType) {
     if (uploadType === "multer") {
       this.setState({
-        multerImage: "./images/placeholder.png"
+        multerImage: "./uploads/userProfileImage/placeholder.png"
       });
     }
-  }
+  } */
   componentDidMount() {
     //  console.log(this.state.user.email);
     app.get('user/' + JSON.parse(localStorage.getItem('user'))._id)
@@ -65,7 +67,7 @@ export class MyAccount extends Component {
           // .then(resImage =>{
           //   this.setState({image: './uploads/userProfileImage/'+resImage.data.image.imageName});
           // })
-          this.setState({ image: './uploads/userProfileImage/' + response.data.user.image });
+          this.setState({ image: response.data.user.image });
         }
         if (response.data.user.hometown != null) {
           this.setState({ hometown: response.data.user.hometown })
@@ -77,63 +79,115 @@ export class MyAccount extends Component {
       })
 
   };
-  uploadImage(e, method) {
-    let imageObj = {};
-    if (method === "multer") {
-      let imageFormObj = new FormData();
-      //imageFormObj.append("imageName", "multer-image-" + Date.now());
-      imageFormObj.append("imageCate", "profile");
-      imageFormObj.append("imageData", e.target.files[0]);
+  handleSelectedFile = e => {
+    e.preventDefault();
+    this.setState({ selectedFile: e.target.files[0], }, () => {
+      console.log(this.state.selectedFile);
+      // console.log(e.target.files[0]);
+    });
+  };
+  /*  onChange = e => {
+     this.setState({ [e.target.name]: e.target.value });
+ 
+   }; */
 
-      // stores a readable instance of 
-      // the image being uploaded using multer
+  handleUpload(e) {
 
-      this.setState({
-        multerImage: URL.createObjectURL(e.target.files[0])
-        //image: URL.createObjectURL(e.target.files[0])
-      });
-      // delete previous profile image
-      if (JSON.parse(localStorage.getItem('user')).image != null) {
-        app.delete('user/profile/' + JSON.parse(localStorage.getItem('user'))._id).then(res => console.log(res.data))
-          .catch(err => { console.log(err) });
-      }
-      // then upload new profle image
-      app.post('user/profileImage/' + JSON.parse(localStorage.getItem('user'))._id, imageFormObj).then((data) => {
-        if (data.data.success) {
-          alert("Image has been successfully upload using multer");
-          this.setDefaultImage("multer");
-        }
-      }).catch((err) => {
-        alert("Error while uploading image using multer");
+    e.preventDefault();
+    //let imageObj = {};
+    console.log(this.state.selectedFile);
+    // if (method === "multer") {
+    //  console.log(e.target.files[0])
+    const imageFormObj = new FormData(e.target);
+    imageFormObj.append("file", this.state.selectedFile)
+    //imageFormObj.append("imageName", "multer-image-" + Date.now());
+    /* imageFormObj.append("imageCate", "profile");
+    imageFormObj.append("imageData", e.target.files[0]); */
+
+    // stores a readable instance of 
+    // the image being uploaded using multer
+
+    /* this.setState({
+      multerImage: URL.createObjectURL(e.target.files[0])
+      //image: URL.createObjectURL(e.target.files[0])
+    }); */
+
+    app.post("upload", imageFormObj)
+      .then((response) => {
+        console.log(response.data.data.key);
+        this.updateDB(response);
+      }).catch(err => {
+        console.log(err);
+      })
+    // delete previous profile image
+    /* if (JSON.parse(localStorage.getItem('user')).image != null) {
+      app.delete('user/profile/' + JSON.parse(localStorage.getItem('user'))._id).then(res => console.log(res.data))
+        .catch(err => { console.log(err) });
+    } */
+    // then upload new profle image
+    /* console.log(imageFormObj);
+    app.post('user/profileImage/' + JSON.parse(localStorage.getItem('user'))._id, imageFormObj).then((data) => {
+      if (data.data.success) {
+        alert("Image has been successfully upload using multer");
         this.setDefaultImage("multer");
+      }
+    }).catch((err) => {
+      alert("Error while uploading image using multer");
+      this.setDefaultImage("multer");
+    }); */
+    /* 
+      the user != tripbuddy 
+      need to update tripbuddy_picture
+      user may in many trips as tripbuddies
+    */
+
+    //update buddy profile
+    /*  app.put('buddy/profile/' + JSON.parse(localStorage.getItem('user'))._id).then(res => console.log(res.data))
+       .catch(err => { console.log(err) 
+     }); */
+
+    // const update = {
+    //   image: {
+    //     owner_id: JSON.parse(localStorage.getItem('user'))._id,
+    //     imageCate: imageFormObj.imageCate
+    //   }
+    // }
+    // console.log(JSON.stringify(update));
+    // // make Image connects User, user.image = image.id
+    // app.put('userImageUpdate/' + JSON.parse(localStorage.getItem('user'))._id,  
+    // {
+    //   owner_id: JSON.parse(localStorage.getItem('user'))._id,
+    //   imageCate: "profile"
+    // })
+    // .then(
+    //   res => console.log(res.data),
+    //   alert("Image has been successfully updated in user profile")
+    // )
+    // .catch(err => { console.log(err) });
+    // }
+  }
+
+  updateDB(flag) {
+    if (flag.status === 200) {
+      let updateimg = {
+        user: {
+          first_name: JSON.parse(localStorage.getItem('user')).first_name,
+          last_name: JSON.parse(localStorage.getItem('user')).last_name,
+          hometown: JSON.parse(localStorage.getItem('user')).hometown,
+          image: flag.data.data.key
+        }
+      }
+      app.put("user/" + JSON.parse(localStorage.getItem('user'))._id, {
+        first_name: JSON.parse(localStorage.getItem('user')).first_name,
+        last_name: JSON.parse(localStorage.getItem('user')).last_name,
+        hometown: JSON.parse(localStorage.getItem('user')).hometown,
+        image: flag.data.data.key
+      }).then(r => {
+        console.log(r);
+      }).catch(err => {
+        console.log(err);
       });
-      /* 
-        then user != tripbuddy 
-        need to update tripbuddy_picture
-        user may in many trips as tripbuddies
-      */
-      app.put('buddy/profile/' + JSON.parse(localStorage.getItem('user'))._id).then(res => console.log(res.data))
-        .catch(err => { console.log(err) 
-      });
-      
-      // const update = {
-      //   image: {
-      //     owner_id: JSON.parse(localStorage.getItem('user'))._id,
-      //     imageCate: imageFormObj.imageCate
-      //   }
-      // }
-      // console.log(JSON.stringify(update));
-      // // make Image connects User, user.image = image.id
-      // app.put('userImageUpdate/' + JSON.parse(localStorage.getItem('user'))._id,  
-      // {
-      //   owner_id: JSON.parse(localStorage.getItem('user'))._id,
-      //   imageCate: "profile"
-      // })
-      // .then(
-      //   res => console.log(res.data),
-      //   alert("Image has been successfully updated in user profile")
-      // )
-      // .catch(err => { console.log(err) });
+      window.location.href = "/MyAccount";
     }
   }
   onChange(event) {
@@ -190,6 +244,7 @@ export class MyAccount extends Component {
 
 
   render() {
+    const { selectedFile } = this.state;
     let editModalClose = () => this.setState({ editPhotoShow: false });
 
     return (
@@ -219,7 +274,7 @@ export class MyAccount extends Component {
               <Card.Body>
                 <div style={{ display: "flex", alignContent: "center" }}>
                   <img className="responsive"
-                    src={require(`${this.state.image}`)}
+                    src={`http://trippinbucket.s3.amazonaws.com/${this.state.image}`}
                     alt="profile" style={{
                       display: "block",
                       margin: "5px auto",
@@ -309,17 +364,21 @@ export class MyAccount extends Component {
                       style={{ margin: "15px auto" }}>
                       UPDATE</Button>
                   </div>
-
-                  <div className="image-container1">
-                    <div className="process">
-                      <h4 className="process_heading">Profile Image: </h4>
-                      <p className="process_details">Upload image from your local device</p>
-
-                      <input type="file" className="process_upload-btn" onChange={(e) => this.uploadImage(e, "multer")} />
-                      <img src={this.state.multerImage} alt="upload-image" className="process_image" />
-                    </div>
-                  </div>
                 </Form>
+                <form onSubmit={this.handleUpload}>
+                  <div className="form-group">
+
+                    <h4 className="process_heading">Profile Image: </h4>
+                    <p className="process_details">Upload image from your local device</p>
+
+                    <input type="file" name="" id="" onChange={this.handleSelectedFile} />
+                    {/* <img src={this.state.multerImage} alt="upload-image" className="process_image" /> */}
+
+                  </div>
+                  <button className="btn btn-primary" type="submit">Update Photo</button>
+                </form>
+
+
 
               </Card.Body>
 

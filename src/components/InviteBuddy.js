@@ -69,7 +69,8 @@ export class InviteBuddy extends Component {
             >
               <img
                 style={{ width: "50px" }}
-                src={require('./uploads/userProfileImage/'+`${user.image}`)}
+                src={`http://trippinbucket.s3.amazonaws.com/${user.image}`}
+
                 alt="userimage"
               />
               <div style={{ margin: "15px 5px 0 15px" }}>{user.first_name}</div>
@@ -274,8 +275,8 @@ export class InviteBuddy extends Component {
                 {this.state.invitation_sent_msg}
               </Alert>
             ) : (
-              ""
-            )}
+                ""
+              )}
           </div>
           <label
             style={{
@@ -310,8 +311,8 @@ export class InviteBuddy extends Component {
               {this.state.email_sent_msg}
             </Alert>
           ) : (
-            ""
-          )}
+              ""
+            )}
         </Modal.Body>
         {/* <Modal.Footer>
                     <Button onClick={this.getBuddyId} >SEND</Button>

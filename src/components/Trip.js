@@ -47,7 +47,7 @@ export class Trip extends Component {
     var z = document.getElementById("end-day").value;
     var w = document.getElementById("trip-name").value;
 
-    let numOfDays = this.datediff(this.parseDate(y), this.parseDate(z));
+    let numOfDays = (this.datediff(this.parseDate(y), this.parseDate(z))) + 1;
     let days = [];
     for (let i = 1; i <= numOfDays; i++) {
       days.push([]);

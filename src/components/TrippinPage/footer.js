@@ -10,7 +10,8 @@ class Footer extends Component {
         borderTop: "1px solid black",
         display: "flex",
         justifyContent: "space-around",
-        marginTop: "0"
+        marginTop: "0",
+        padding: "0"
       }}>
         <div style={{
           display: "flex",
@@ -66,7 +67,8 @@ class Footer extends Component {
             textShadow: "0.25px 0.25px rgb(200,200,200)"
           }}>SUPPORT</h5>
           <a href='/FAQ'>FAQ</a>
-          <p>CONTACT</p>
+          <p style={{ margin: "15px 0 0 0 " }}>CONTACT US:</p>
+          <p>trippin.app.fatcat@gmail.com</p>
         </div>
 
         {/* <p>Support <br /> trippinwebapp@gmail.com</p> */}
