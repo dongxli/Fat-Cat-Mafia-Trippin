@@ -24,6 +24,7 @@ import { DropdownButton } from "react-bootstrap";
 import Recommendation from "./Recommendation";
 import ForgotPassword from "./ForgotPassword";
 import FAQ from "./FAQ";
+import Survey from "./Survey";
 
 import ResetPassword from "./ResetPassword";
 //import UpdatePasswordViaEmail from "./UpdatePasswordViaEmail";
@@ -111,9 +112,11 @@ class AppNavBar extends Component {
             style={{
               background: "#242529",
               boxShadow: "0px 2px 3px rgba(0, 0, 0, 0.04)",
+              padding: "0",
+              height: "8%"
             }}
           >
-            <Container>
+            <Container style={{ background: "#242529", }}>
               <NavbarBrand href="/">
                 <img
                   src={require("./images/trippinicon.jpg")}
@@ -167,6 +170,9 @@ class AppNavBar extends Component {
             </Route>
             <Route path="/myAccount">
               <MyAccount />
+            </Route>
+            <Route path="/survey">
+              <Survey />
             </Route>
             <Route path="/FAQ">
               <FAQ />

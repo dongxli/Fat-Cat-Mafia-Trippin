@@ -6,7 +6,7 @@ import { Accordion, Card, Button } from 'react-bootstrap';
 class FAQ extends Component {
     render() {
         return (
-            <div style={{ backgroundColor: "rgb(218,230,242)" }}>
+            <div style={{ backgroundColor: "#abc0c4" }}>
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                         <h5 style={{ textAlign: "center", paddingTop: "30px", paddingBottom: "20px" }}>NEW TO TRIPPIN? FOLLOW THIS GUIDE TO GET YOU STARTED:</h5>

@@ -20,7 +20,7 @@ class Friends extends Component {
       search_message: "",
       search_boolean: false,
       search_alert_variant: "",
-      user_profile_image: "./uploads/userProfileImage/placeholder.png",
+      user_profile_image: "placeholder.png",
     };
   }
 
@@ -29,7 +29,7 @@ class Friends extends Component {
       .then(response => {
         console.log(response.data.user.email);
         if (response.data.user.image != null) {
-          this.setState({ user_profile_image: './uploads/userProfileImage/' + response.data.user.image });
+          this.setState({ user_profile_image: response.data.user.image });
         }
       }).catch(function (error) {
         console.log(error);
@@ -124,7 +124,7 @@ class Friends extends Component {
             <div className="card-info">
               {list[i].image ? (
                 <img
-                  src={`http://trippinbucket.s3.amazonaws.com/${list[i].image}`}
+                  src={`http://fatcatimages.s3.amazonaws.com/${list[i].image}`}
 
                   alt="user"
                   className="profile-photo-lg"
@@ -182,7 +182,7 @@ class Friends extends Component {
             <div className="card-info">
               {list[i].image ? (
                 <img
-                  src={`http://trippinbucket.s3.amazonaws.com/${list[i].image}`}
+                  src={`http://fatcatimages.s3.amazonaws.com/${list[i].image}`}
 
                   alt="user"
                   className="profile-photo-lg"
@@ -190,7 +190,7 @@ class Friends extends Component {
               ) : (
                   <img
                     //src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                    src={`http://trippinbucket.s3.amazonaws.com/${list[i].image}`}
+                    src={`http://fatcatimages.s3.amazonaws.com/${list[i].image}`}
 
                     alt="user"
                     className="profile-photo-lg"
@@ -235,7 +235,7 @@ class Friends extends Component {
   render() {
     //let user = JSON.parse(localStorage.getItem("user"));
     return (
-      <div style={{ height: "100%" }}>
+      <div >
         <div className="container">
           <div className="create-post">
             <div className="row">
@@ -261,7 +261,7 @@ class Friends extends Component {
                     />
                   )} */}
                   {<img
-                    src={`http://trippinbucket.s3.amazonaws.com/${this.state.user_profile_image}`}
+                    src={`http://fatcatimages.s3.amazonaws.com/${this.state.user_profile_image}`}
 
                     alt=""
                     className="profile-photo-md"
@@ -347,6 +347,7 @@ class Friends extends Component {
             <div className="row">{this.state.friend_list}</div>
           </div>
         </div>
+        <div style={{ height: "65px" }}></div>
         <Footer />
       </div>
     );

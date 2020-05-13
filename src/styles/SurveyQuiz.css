@@ -148,6 +148,7 @@ body {
   }
   
   .App-header {
+    background-color: #282c34;
     text-transform: uppercase;
     min-height: 10vh;
     display: flex;
@@ -155,6 +156,14 @@ body {
     align-items: center;
     justify-content: center;
     font-size: calc(10px + 2vmin);
-    color: green;
+    color: white;
   }
+
+  .App {
+  text-align: center;
+}
+
+.buttonComplete {
+  background-color: rgba(20, 145, 20, 0.562);
+}
   

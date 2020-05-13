@@ -8,7 +8,6 @@ const db = require("../config_url").mongoURL;
 const multer = require('multer');
 var multerS3 = require('multer-s3');
 var fs = require('fs');
-const path = require('path');
 var AWS = require("aws-sdk");
 var s3 = new AWS.S3();
 const DOCUMENT = require("../models/document.model");
@@ -186,14 +185,14 @@ UPLOADROUTES.post("/upload", upload.single("file"), function (req, res) {
     let s3bucket = new AWS.S3({
         accessKeyId: AWS_KEY.AWS_ACCESS_KEY_ID,
         secretAccessKey: AWS_KEY.AWS_SECRET_ACCESS_KEY,
-        region: 'us-east-1'
+        region: 'us-west-1'
     });
 
     //Where you want to store your file
 
     var params = {
-        Bucket: 'trippinbucket',
-        Key: file.originalname,
+        Bucket: 'fatcatimages',
+        Key: Date.now() + file.originalname,
         Body: file.buffer,
         ContentType: file.mimetype,
         ACL: "public-read"
@@ -206,12 +205,13 @@ UPLOADROUTES.post("/upload", upload.single("file"), function (req, res) {
             res.send({ data });
             var newFileUploaded = {
                 description: req.body.description,
-                fileLink: s3FileURL + file.originalname,
+                fileLink: s3FileURL + Date.now() + file.originalname,
                 s3_key: params.Key
             };
             var document = new DOCUMENT(newFileUploaded);
             document.save(function (error, newFile) {
                 if (error) {
+                    console.log(error);
                     throw error;
                 }
             });

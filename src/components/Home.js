@@ -83,10 +83,12 @@ export class Home extends Component {
     app
       .get("buddypending/" + JSON.parse(localStorage.getItem("user"))._id)
       .then((res) => {
-        this.setState({ invite: res.data.tripbuddy });
         this.setState({
-          invitation_list: this.createInvitations(res.data.tripbuddy),
+          invite: res.data.tripbuddy,
+
         });
+        this.setState({ invitation_list: this.createInvitations(res.data.tripbuddy) });
+
       });
   }
   onDeleteFieldClick(e, i) {
@@ -145,10 +147,33 @@ export class Home extends Component {
       });
   }
 
+  createInvitationArray(list) {
+    console.log(list);
+    let array = [];
+    for (let i = 0; i < list.length; i++) {
+      app.get("tripid/" + list[i].trip_id).then(r => {
+        console.log(r);
+        array.push({
+          owner: `${list[i].owner_first_name} ${list[i].owner_last_name}`,
+          trip_id: list[i].trip_id,
+          trip_image: r.data.trip[0].trip_image,
+          accepted: list[i].accepted,
+          denied: list[i].denied,
+          pending: list[i].pending,
+          owner_id: list[i].owner_id
+        })
+      })
+    }
+    return array;
+  }
+
   createInvitations(list) {
+    console.log(list);
     let elements = [];
     let trip = {};
+
     for (let i = 0; i < list.length; i++) {
+
       if (list[i].pending == true) {
         this.setState({ status: "PENDING" });
       } else {
@@ -159,73 +184,81 @@ export class Home extends Component {
         }
       }
 
-      if (list[i].pending == true) {
-        elements.push(
-          <div className="col-md-3 col-sm-6" key={i}>
-            <Card style={{ minWidth: "150px" }}>
-              <Card.Header as="h5">
-                <Button
-                  onClick={(e) => {
-                    this.updateLocalTripInvite(e, list[i]);
-                  }}
-                  id="linkbtn"
-                  className="trip-fonts"
-                  style={{
-                    textDecoration: "none",
-                    backgroundColor: "transparent",
-                    border: "none",
-                    borderRadius: "20px",
-                    color: "black",
-                  }}
-                >
-                  {list[i].trip_name}
-                </Button>
-              </Card.Header>
-              <Card.Body>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    marginBottom: "10px",
-                  }}
-                >
-                  <label style={{ margin: "auto" }}>
-                    <strong>FROM: </strong>
-                  </label>
-                  <div style={{ display: "flex" }}>
+      if (list[i].pending == true || list[i].accepted == true) {
+        if (list[i].owner_id != JSON.parse(localStorage.getItem('user'))._id) {
+
+
+          console.log(list[i]);
+          elements.push(
+            <div className="col-md-3 col-sm-6" key={i}>
+              <Card style={{ minWidth: "150px" }}>
+
+                <Card.Header as="h5" style={{ padding: "0", display: "flex", justifyContent: "center" }}>
+                  <Button
+                    onClick={(e) => {
+                      this.updateLocalTripInvite(e, list[i]);
+                    }}
+                    id="linkbtn"
+                    className="trip-fonts"
+                    style={{
+                      textDecoration: "none",
+                      backgroundColor: "transparent",
+                      border: "none",
+                      borderRadius: "20px",
+                      color: "black",
+                      fontWeight: "bold",
+                      textTransform: "uppercase",
+
+                    }}
+                  >
+                    {list[i].trip_name}
+                  </Button>
+                </Card.Header>
+                <Card.Body>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      marginBottom: "10px",
+                    }}>
+
                     <label style={{ margin: "auto" }}>
-                      {list[i].owner_first_name}
+                      <strong>FROM: </strong>
                     </label>
-                    <label style={{ margin: "auto" }}>
-                      {list[i].owner_last_name}
-                    </label>
+                    <div style={{ display: "flex" }}>
+                      <label style={{ margin: "auto" }}>
+                        {`${list[i].owner_first_name} ${list[i].owner_last_name}`}
+                      </label>
+
+                    </div>
                   </div>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <label style={{ margin: "auto" }}>
-                    <strong>STATUS: </strong>
-                  </label>
-                  <label style={{ margin: "auto" }}>{this.state.status}</label>
-                </div>
-                <Button
-                  variant="info"
-                  onClick={(e) => {
-                    this.updateLocalTripInvite(e, list[i]);
-                  }}
-                  style={{ display: "block", margin: "20px auto 0 auto" }}
-                >
-                  VIEW
-                </Button>
-              </Card.Body>
-            </Card>
-            <div
-              className="trip-card"
-              style={{
-                margin: "10px 10px 10px 10px",
-              }}
-            ></div>
-          </div>
-        );
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <label style={{ margin: "auto" }}>
+                      <strong>STATUS: </strong>
+                    </label>
+                    <label style={{ margin: "auto" }}>{this.state.status}</label>
+                  </div>
+                  <Button
+                    variant="info"
+                    onClick={(e) => {
+                      this.updateLocalTripInvite(e, list[i]);
+                    }}
+                    style={{ display: "block", margin: "20px auto 0 auto" }}
+                  >
+                    VIEW
+                  </Button>
+                </Card.Body>
+              </Card>
+              <div
+                className="trip-card"
+                style={{
+                  margin: "10px 10px 10px 10px",
+                }}
+              ></div>
+            </div>
+          );
+        }
+
       }
     }
     if (elements.length > 0) {
@@ -246,7 +279,7 @@ export class Home extends Component {
             <Card.Img
               variant="top"
               style={{ border: "2px solid gray" }}
-              src={`http://trippinbucket.s3.amazonaws.com/${list[i].trip_image}`}
+              src={`http://fatcatimages.s3.amazonaws.com/${list[i].trip_image}`}
 
             />
             <Card.Header as="h5">
@@ -382,7 +415,7 @@ export class Home extends Component {
             <Card.Img
               variant="top"
               style={{ border: "2px solid gray" }}
-              src={`http://trippinbucket.s3.amazonaws.com/${list[i].trip_image}`}
+              src={`http://fatcatimages.s3.amazonaws.com/${list[i].trip_image}`}
 
             />
             <Card.Header as="h5">
@@ -515,7 +548,7 @@ export class Home extends Component {
                   <img
                     alt="profile"
                     className="responsive"
-                    src={`http://trippinbucket.s3.amazonaws.com/${this.state.image}`}
+                    src={`http://fatcatimages.s3.amazonaws.com/${this.state.image}`}
                     style={{
                       display: "block",
                       margin: "5px auto",
@@ -533,7 +566,7 @@ export class Home extends Component {
                 >
                   <div
                     style={{
-                      margin: "5px auto",
+                      margin: "5px ",
                     }}
                   >
                     <label
@@ -548,7 +581,7 @@ export class Home extends Component {
                   </div>
                   <div
                     style={{
-                      margin: "5px auto",
+                      margin: "5px ",
                     }}
                   >
                     <label

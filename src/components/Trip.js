@@ -74,6 +74,7 @@ export class Trip extends Component {
         console.log(err);
       });
     // e.preventDefault();
+    window.location = "Survey";
   };
   render() {
     let addSurveyClose = () => this.setState({ addSurveyShow: false });
@@ -166,9 +167,11 @@ export class Trip extends Component {
                     style={{
                       width: "100%",
                       // backgroundColor: "white",
+                      textAlign: "center",
                       border: "1px solid #CED4DA",
                       backgroundColor: "transparent",
                       color: "#6c757d",
+                      paddingLeft: "15%"
                     }}
                   />
                   <label htmlFor="startdate" style={{ color: "#6c757d" }}>
@@ -187,6 +190,8 @@ export class Trip extends Component {
                       border: "1px solid #CED4DA",
                       backgroundColor: "transparent",
                       color: "#6c757d",
+                      textAlign: "center",
+                      paddingLeft: "15%"
                     }}
                     id="end-day"
                   />
@@ -204,17 +209,17 @@ export class Trip extends Component {
                       backgroundColor: "#4a7199",
                       color: "#fff",
                     }}
-                    // onClick={
-                    //     this.onCreateFieldClick();
-                    // }
+                  // onClick={
+                  // this.onCreateFieldClick()
+                  // }
                   >
                     Create
                   </button>
-                  <Survey
-                    show={this.state.addSurveyShow}
-                    onHide={addSurveyClose}
-                    handler={this.handler}
-                  />
+                  {/*<Survey
+                  //  show={this.state.addSurveyShow}
+                  //  onHide={addSurveyClose}
+                  //  handler={this.handler}
+                  />*/}
                 </ButtonToolbar>
 
                 {/* <button

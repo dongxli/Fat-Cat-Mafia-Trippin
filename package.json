@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.2.1",
+    "@types/react-transition-group": "^4.2.4",
     "async": "^3.2.0",
     "aws-sdk": "^2.674.0",
     "axios": "^0.19.2",

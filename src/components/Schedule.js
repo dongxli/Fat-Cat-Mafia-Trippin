@@ -21,6 +21,7 @@ import "slick-carousel";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { reduce } from "async";
+import Footer from "./TrippinPage/footer";
 
 class Schedule extends Component {
   constructor(props) {
@@ -29,7 +30,7 @@ class Schedule extends Component {
       trip_id: this.props.match.params.id,
       trip_locations: [],
       trip_location_elements: [],
-      trip_event_elements:[],
+      trip_event_elements: [],
       event_locations: [],
 
       startDate: null,
@@ -48,13 +49,15 @@ class Schedule extends Component {
     app.get("tripinfo/" + this.state.trip_id)
       .then(res => {
         this.setState({ days_miles: res.data.trip.days_miles });
-        this.setState({ trip_locations: res.data.trip.trip_locations, 
-          event_locations: res.data.trip.event_locations });
+        this.setState({
+          trip_locations: res.data.trip.trip_locations,
+          event_locations: res.data.trip.event_locations
+        });
 
-     //   console.log(this.state.event_locations);
-     //   console.log(this.state.trip_locations);
-     //   console.log(res.data.trip.start_date);
-     //   console.log(res.data.trip.end_date);
+        //   console.log(this.state.event_locations);
+        //   console.log(this.state.trip_locations);
+        //   console.log(res.data.trip.start_date);
+        //   console.log(res.data.trip.end_date);
         this.setState({
           trip_location_elements: this.getUserLocationsDroppable(
             this.createList(this.state.trip_locations)
@@ -63,9 +66,10 @@ class Schedule extends Component {
             this.createEvent(this.state.event_locations)
           )
         });
-        this.setState({ days: res.data.trip.days,
+        this.setState({
+          days: res.data.trip.days,
           startDate: res.data.trip.start_date,
-          endDate: res.data.trip.end_date  
+          endDate: res.data.trip.end_date
         });
         this.setState({
           days_elements: this.getDaysDroppable(this.state.days)
@@ -87,8 +91,10 @@ class Schedule extends Component {
     })
       .then(res => {
         this.setState({ days_miles: res.data.trip.days_miles });
-        this.setState({ trip_locations: res.data.trip.trip_locations,
-        event_location: res.data.trip.event_locations });
+        this.setState({
+          trip_locations: res.data.trip.trip_locations,
+          event_location: res.data.trip.event_locations
+        });
         this.setState({
           trip_location_elements: this.getUserLocationsDroppable(
             this.createList(this.state.trip_locations)
@@ -97,10 +103,11 @@ class Schedule extends Component {
             this.createEvent(this.state.event_locations)
           )
         });
-        this.setState({ days: res.data.trip.days, 
+        this.setState({
+          days: res.data.trip.days,
           startDate: res.data.trip.start_date,
           endDate: res.data.trip.end_date
-         });
+        });
         this.setState({
           days_elements: this.getDaysDroppable(this.state.days)
         });
@@ -115,6 +122,7 @@ class Schedule extends Component {
   createList(list) {
     let elements = [];
     for (let i = 0; i < list.length; i++) {
+      if (list[i] != null){
       elements.push(
         <Draggable draggableId={i.toString()} index={i} key={i}>
           {provided => (
@@ -153,7 +161,7 @@ class Schedule extends Component {
                           textOverflow: "ellipsis"
                         }}
                       >
-                       <b><span>{list[i].name}</span></b>
+                        <b><span>{list[i].name}</span></b>
                       </div>
                       <ul className="list-unstyled list-inline rating mb-0">
                         {this.getRatingStar(list[i].rating)}
@@ -202,6 +210,7 @@ class Schedule extends Component {
         </Draggable>
       );
     }
+    }
     return elements;
   }
 
@@ -209,6 +218,7 @@ class Schedule extends Component {
   createEvent(list) {
     let elements = [];
     for (let i = 0; i < list.length; i++) {
+      if (list[i] != null){
       elements.push(
         <Draggable draggableId={i.toString()} index={i} key={i}>
           {provided => (
@@ -250,20 +260,20 @@ class Schedule extends Component {
                       >
                         <b><span>{list[i].name}</span></b>
                       </div>
-                     
-                     <b>
-                      <span
-                        className="card-text"
-                        style={{
-                          display: "inline-block",
-                          float: "left",
-                          clear: "left",
-                          fontSize: "10px"
-                        }}
-                      >
-                        {list[i].dates.start.localDate} • {list[i].dates.start.localTime}
-                      </span>
-                    </b>
+
+                      <b>
+                        <span
+                          className="card-text"
+                          style={{
+                            display: "inline-block",
+                            float: "left",
+                            clear: "left",
+                            fontSize: "10px"
+                          }}
+                        >
+                          {list[i].dates.start.localDate} • {list[i].dates.start.localTime}
+                        </span>
+                      </b>
                       <span
                         className="card-text"
                         style={{
@@ -310,6 +320,7 @@ class Schedule extends Component {
           )}
         </Draggable>
       );
+    }
     }
     return elements;
   }
@@ -411,58 +422,59 @@ class Schedule extends Component {
   getDaysDroppable(daysList) {
     let get_start = new Date(this.state.startDate);
     var get_month = (get_start.getMonth() + 1);
-    var get_date =  (get_start.getDate() + 1);
-    var get_year =  get_start.getFullYear();
+    var get_date = (get_start.getDate() + 1);
+    var get_year = get_start.getFullYear();
 
     const elements = [];
     for (let i = 0; i < daysList.length; i++) {
-        elements.push(
-          <div style={{ flex: "1" }} key={i}>
-            <Droppable droppableId={i.toString()}>
-              {(provided, snapshot) => (
+      elements.push(
+        <div style={{ flex: "1" }} key={i}>
+          <Droppable droppableId={i.toString()}>
+            {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                ref={provided.innerRef}
+                style={{
+                  width: "250px",
+                  minHeight: "100px",
+                  maxHeight: "1000px",
+                  backgroundColor: "#DEE7ED",
+                  paddingBottom: "5px",
+                  borderRadius: "5px"
+                }}
+              >
                 <div
-                  ref={provided.innerRef}
-                  ref={provided.innerRef}
                   style={{
-                    width: "250px",
-                    minHeight: "100px",
-                    maxHeight: "1000px",
-                    backgroundColor: "#DEE7ED",
-                    paddingBottom: "5px",
-                    borderRadius: "5px"
+                    marginLeft: "10px",
+                    paddingTop: "5px",
+                    fontFamily: "Roboto, sans-serif",
+                    fontSize: "16px"
                   }}
                 >
-                  <div
-                    style={{
-                      marginLeft: "10px",
-                      paddingTop: "5px",
-                      fontFamily: "Roboto, sans-serif",
-                      fontSize: "16px"
-                    }}
-                  >
-                    Day {i + 1} • {get_month}{"/"}{get_date + i}{"/"}{get_year}
-                    {this.state.days_miles &&
-                      this.state.days_miles.length != 0 &&
-                      this.state.days_miles[i] != 0 ? (
-                        <span
-                          style={{
-                            float: "right",
-                            marginRight: "20px",
-                            fontSize: "12px",
-                            paddingTop: "5px"
-                          }}
-                        >
-                          {this.state.days_miles[i].toFixed(2) + " miles"}
-                        </span>
-                      ) : (
-                        ""
-                      )}
-                
-                  </div>
-                  {this.state.event_locations.map((event, k) => (
-                   
-                     <div className="card">
-                      {(get_date+i) == (new Date(event.dates.start.localDate).getDate() + 1) ? (
+                  Day {i + 1} • {get_month}{"/"}{get_date + i}{"/"}{get_year}
+                  {this.state.days_miles &&
+                    this.state.days_miles.length != 0 &&
+                    this.state.days_miles[i] != 0 ? (
+                      <span
+                        style={{
+                          float: "right",
+                          marginRight: "20px",
+                          fontSize: "12px",
+                          paddingTop: "5px"
+                        }}
+                      >
+                        {this.state.days_miles[i].toFixed(2) + " miles"}
+                      </span>
+                    ) : (
+                      ""
+                    )}
+
+                </div>
+                {this.state.event_locations.map((event, k) => (
+
+                  <div className="card">
+
+                    {event != null && (get_date + i) == (new Date(event.dates.start.localDate).getDate() + 1) ? (
                       <div className="row no-gutters">
                         <div
                           className="col-auto"
@@ -483,150 +495,150 @@ class Schedule extends Component {
                           />
                         </div>
                         <div className="col">
-                                <div className="card-block px-2"
-                                >
-                                  <b><span className="card-text" style={{color: "blue"}}>{event.name}</span></b>
-                                  <span
-                                    className="card-text"
-                                    style={{
-                                      display: "inline-block",
-                                      float: "left",
-                                      clear: "left",
-                                      fontSize: "10px"
-                                    }}
-                                  >
-                                    {event.dates.start.localDate} • {event.dates.start.localTime}
-                                  </span>
-                                  <span
-                                    className="card-text"
-                                    style={{
-                                      display: "inline-block",
-                                      float: "left",
-                                      clear: "left",
-                                      fontSize: "10px"
-                                    }}
-                                  >
-                                    {event._embedded.venues[0].name}
-                                  </span>
-                                  <span
-                                    className="card-text"
-                                    style={{
-                                      display: "inline-block",
-                                      float: "left",
-                                      clear: "left",
-                                      fontSize: "10px"
-                                    }}
-                                  >
-                                    {event._embedded.venues[0].address.line1}
-                                  </span>
-                                  
-                                  <span
-                                    className="card-text"
-                                    style={{
-                                      display: "inline-block",
-                                      float: "left",
-                                      clear: "left",
-                                      fontSize: "10px"
-                                    }}
-                                  >
-                                    {event._embedded.venues[0].city.name} {", "} {event._embedded.venues[0].state.stateCode}
-                                    {" "} {event._embedded.venues[0].postalCode}
-                                  </span>
-                                </div>
+                          <div className="card-block px-2"
+                          >
+                            <b><span className="card-text" style={{ color: "blue" }}>{event.name}</span></b>
+                            <span
+                              className="card-text"
+                              style={{
+                                display: "inline-block",
+                                float: "left",
+                                clear: "left",
+                                fontSize: "10px"
+                              }}
+                            >
+                              {event.dates.start.localDate} • {event.dates.start.localTime}
+                            </span>
+                            <span
+                              className="card-text"
+                              style={{
+                                display: "inline-block",
+                                float: "left",
+                                clear: "left",
+                                fontSize: "10px"
+                              }}
+                            >
+                              {event._embedded.venues[0].name}
+                            </span>
+                            <span
+                              className="card-text"
+                              style={{
+                                display: "inline-block",
+                                float: "left",
+                                clear: "left",
+                                fontSize: "10px"
+                              }}
+                            >
+                              {event._embedded.venues[0].address.line1}
+                            </span>
+
+                            <span
+                              className="card-text"
+                              style={{
+                                display: "inline-block",
+                                float: "left",
+                                clear: "left",
+                                fontSize: "10px"
+                              }}
+                            >
+                              {event._embedded.venues[0].city.name} {", "} {event._embedded.venues[0].state.stateCode}
+                              {" "} {event._embedded.venues[0].postalCode}
+                            </span>
+                          </div>
                         </div>
-                      </div> ):("")}
-                    </div>
-                  
-                  ))}
-                  {this.state.days[i].map((item, index) => (
-      
-                    <Draggable
-                      key={item.id}
-                      draggableId={item.id}
-                      index={index}
-                    >
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          className="draggable"
-                        >
-                          <div className="card">
-                            <div className="row no-gutters">
-                              <div
-                                className="col-auto"
+                      </div>) : ("")}
+                  </div>
+
+                ))}
+                {this.state.days[i].map((item, index) => (
+
+                  <Draggable
+                    key={item.id}
+                    draggableId={item.id}
+                    index={index}
+                  >
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className="draggable"
+                      >
+                        <div className="card">
+                          <div className="row no-gutters">
+                            <div
+                              className="col-auto"
+                              style={{
+                                marginTop: "8px",
+                                marginLeft: "8px"
+                              }}
+                            >
+                              <img
+                                src={item.image_url}
+                                className="img-fluid"
+                                alt=""
                                 style={{
-                                  marginTop: "8px",
-                                  marginLeft: "8px"
+                                  height: "40px",
+                                  width: "40px",
+                                  borderRadius: "50%"
                                 }}
-                              >
-                                <img
-                                  src={item.image_url}
-                                  className="img-fluid"
-                                  alt=""
+                              />
+                            </div>
+                            <div className="col">
+                              <div className="card-block px-2">
+                                <b><span className="card-text">{item.name}</span></b>
+                                <ul className="list-unstyled list-inline rating mb-0">
+                                  {this.getRatingStar(item.rating)}
+                                  <span
+                                    style={{
+                                      fontSize: "10px",
+                                      color: "#6c757d",
+                                      marginLeft: "10px"
+                                    }}
+                                  >
+                                    {item.rating} {"("}
+                                    {item.review_count}
+                                    {")"}
+                                  </span>
+                                </ul>
+                                <span
+                                  className="card-text"
                                   style={{
-                                    height: "40px",
-                                    width: "40px",
-                                    borderRadius: "50%"
+                                    display: "inline-block",
+                                    float: "left",
+                                    clear: "left",
+                                    fontSize: "10px"
                                   }}
-                                />
-                              </div>
-                              <div className="col">
-                                <div className="card-block px-2">
-                                  <b><span className="card-text">{item.name}</span></b>
-                                  <ul className="list-unstyled list-inline rating mb-0">
-                                    {this.getRatingStar(item.rating)}
-                                    <span
-                                      style={{
-                                        fontSize: "10px",
-                                        color: "#6c757d",
-                                        marginLeft: "10px"
-                                      }}
-                                    >
-                                      {item.rating} {"("}
-                                      {item.review_count}
-                                      {")"}
-                                    </span>
-                                  </ul>
-                                  <span
-                                    className="card-text"
-                                    style={{
-                                      display: "inline-block",
-                                      float: "left",
-                                      clear: "left",
-                                      fontSize: "10px"
-                                    }}
-                                  >
-                                    {item.price} • {item.categories[0].title}
-                                  </span>
-                                  <span
-                                    className="card-text"
-                                    style={{
-                                      display: "inline-block",
-                                      float: "left",
-                                      clear: "left",
-                                      fontSize: "10px"
-                                    }}
-                                  >
-                                    {item.location.display_address[0]}
-                                    {", "} {item.location.display_address[1]}
-                                  </span>
-                                </div>
+                                >
+                                  {item.price} • {item.categories[0].title}
+                                </span>
+                                <span
+                                  className="card-text"
+                                  style={{
+                                    display: "inline-block",
+                                    float: "left",
+                                    clear: "left",
+                                    fontSize: "10px"
+                                  }}
+                                >
+                                  {item.location.display_address[0]}
+                                  {", "} {item.location.display_address[1]}
+                                </span>
                               </div>
                             </div>
                           </div>
                         </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </div>
-        );
-    
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </div>
+      );
+
     }
     return elements;
   }
@@ -638,7 +650,7 @@ class Schedule extends Component {
 
     if (
       (result.source.droppableId == "userlist" &&
-      result.destination.droppableId == "userlist")
+        result.destination.droppableId == "userlist")
     ) {
       console.log(result);
       this.state.trip_locations.splice(
@@ -690,7 +702,7 @@ class Schedule extends Component {
 
     } else if (
       result.source.droppableId != "userlist" &&
-      result.destination.droppableId !== "userlist" 
+      result.destination.droppableId !== "userlist"
     ) {
       let item = this.state.days[parseInt(result.source.droppableId)].splice(
         result.source.index,
@@ -709,7 +721,7 @@ class Schedule extends Component {
       this.setState({
         days_elements: this.getDaysDroppable(this.state.days)
       });
-    } 
+    }
   };
 
   render() {
@@ -731,8 +743,8 @@ class Schedule extends Component {
       </div>
     );
     return (
-      
-      <div>
+
+      <div className="wrap">
         {!this.state.loading ? (
           <DragDropContext onDragEnd={this.onDragEnd}>
             <div style={{ width: "100%", height: "60px", display: "flex", justifyContent: "space-around", padding: "10px" }}>
@@ -793,7 +805,7 @@ class Schedule extends Component {
                     {this.state.days_elements}
                   </div>
                 ) : (
-                    "" 
+                    ""
                   )}
               </div>
             </div>
@@ -801,6 +813,7 @@ class Schedule extends Component {
         ) : (
             LoadingBar
           )}
+        <Footer style={{ marginTop: "10px" }} />
       </div>
     );
   }

@@ -69,7 +69,7 @@ export class InviteBuddy extends Component {
             >
               <img
                 style={{ width: "50px" }}
-                src={`http://trippinbucket.s3.amazonaws.com/${user.image}`}
+                src={`http://fatcatimages.s3.amazonaws.com/${user.image}`}
 
                 alt="userimage"
               />

@@ -18,10 +18,10 @@ class Main extends Component {
         <div>
           <div className="services" style={{}}>
             <div className="service-one">
-              <p className="service-icon" >
-                <i className="far fa-calendar-alt" style={{ color: "rgb(53,128,134)" }}></i>
+              <p className="service-icon" style={{ borderBottom: "2px solid rgb(53,128,134)" }}>
+                <i className="fas fa-crop" style={{ color: "rgb(53,128,134)" }}></i>
               </p>
-              <p className="service-title" style={{ color: "#DC143C	" }}>
+              <p className="service-title" style={{ color: "#f3b768" }}>
                 Planning
               </p>
               <p style={{ color: "white" }}>
@@ -30,10 +30,10 @@ class Main extends Component {
               </p>
             </div>
             <div className="service-two">
-              <p className="service-icon">
-                <i className="fas fa-crop" style={{ color: "rgb(53,128,134)" }}></i>
+              <p className="service-icon" style={{ borderBottom: "2px solid rgb(53,128,134)" }}>
+                <i className="far fa-calendar-alt" style={{ color: "rgb(53,128,134)" }}></i>
               </p>
-              <p className="service-title" style={{ color: "#DC143C	" }}>
+              <p className="service-title" style={{ color: "#f3b768" }}>
                 Scheduling
               </p>
               <p style={{ color: "white" }}>
@@ -41,10 +41,10 @@ class Main extends Component {
               </p>
             </div>
             <div className="service-three">
-              <p className="service-icon">
+              <p className="service-icon" style={{ borderBottom: "2px solid rgb(53,128,134)" }}>
                 <i className="fas fa-code" style={{ color: "rgb(53,128,134)" }}></i>
               </p>
-              <p className="service-title" style={{ color: "#DC143C	" }}>
+              <p className="service-title" style={{ color: "#f3b768" }}>
                 Collaborating
               </p>
               <p style={{ color: "white" }}>

@@ -6,6 +6,7 @@ backend/config_yelp.js
 backend/config_tm.js
 backend/sender.js
 backend/config_stub.js
+backend/config_s3.js
 # dependencies
 /node_modules
 /.pnp
@@ -16,7 +17,8 @@ backend/config_stub.js
 
 # production
 /build
-
+/aws
+awscliv2.zip
 # misc
 .DS_Store
 .env.local

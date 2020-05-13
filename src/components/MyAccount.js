@@ -95,10 +95,11 @@ export class MyAccount extends Component {
 
     e.preventDefault();
     //let imageObj = {};
-    console.log(this.state.selectedFile);
-    // if (method === "multer") {
-    //  console.log(e.target.files[0])
+
+
     const imageFormObj = new FormData(e.target);
+    console.log(imageFormObj);
+    imageFormObj.set("name", e.target.name + Date.now());
     imageFormObj.append("file", this.state.selectedFile)
     //imageFormObj.append("imageName", "multer-image-" + Date.now());
     /* imageFormObj.append("imageCate", "profile");
@@ -174,20 +175,38 @@ export class MyAccount extends Component {
           first_name: JSON.parse(localStorage.getItem('user')).first_name,
           last_name: JSON.parse(localStorage.getItem('user')).last_name,
           hometown: JSON.parse(localStorage.getItem('user')).hometown,
-          image: flag.data.data.key
+          image: flag.data.data.Key
         }
       }
       app.put("user/" + JSON.parse(localStorage.getItem('user'))._id, {
         first_name: JSON.parse(localStorage.getItem('user')).first_name,
         last_name: JSON.parse(localStorage.getItem('user')).last_name,
         hometown: JSON.parse(localStorage.getItem('user')).hometown,
-        image: flag.data.data.key
+        image: flag.data.data.Key
       }).then(r => {
         console.log(r);
       }).catch(err => {
         console.log(err);
       });
+
+      //update buddy profile
+      app.put('buddy/profile/' + JSON.parse(localStorage.getItem('user'))._id).
+        then(res => console.log(res.data))
+        .catch(err => {
+          console.log(err)
+        });
+
+      app.put("comment/images/" + JSON.parse(localStorage.getItem('user'))._id, {
+        image: flag.data.data.Key
+      }).then(resp => {
+        console.log(resp);
+      }).catch(err => {
+        console.log(err);
+      })
       window.location.href = "/MyAccount";
+    }
+    else {
+      alert("Image Upload not available");
     }
   }
   onChange(event) {
@@ -233,7 +252,14 @@ export class MyAccount extends Component {
 
     }
     console.log(JSON.stringify(update));
-    app.put('user/' + JSON.parse(localStorage.getItem('user'))._id, update)
+    app.put('user/' + JSON.parse(localStorage.getItem('user'))._id, {
+      _id: JSON.parse(localStorage.getItem('user'))._id,
+      first_name: x,
+      last_name: y,
+      image: this.state.image,
+      __v: this.state.__v,
+      hometown: z
+    })
       .then(res => console.log(res.data))
       .catch(err => { console.log(err) });
 
@@ -259,6 +285,12 @@ export class MyAccount extends Component {
           overflow: "auto",
           display: "flex"
         }}>
+          <Button href="/home" className="fas fa-arrow-left" variant="outline-dark" style={{
+            height: "40px",
+            margin: "35px 0 0 20px",
+            border: "1px solid black",
+            paddingTop: "10px"
+          }}></Button>
           <div style={{ height: "100%", display: "flex", width: "100%" }}>
             <Card style={{
               height: "60%", margin: "3%", borderRadius: "5px",
@@ -271,10 +303,10 @@ export class MyAccount extends Component {
               maxWidth: "350px",
               minWidth: "250px"
             }}>
-              <Card.Body>
+              <Card.Body >
                 <div style={{ display: "flex", alignContent: "center" }}>
                   <img className="responsive"
-                    src={`http://trippinbucket.s3.amazonaws.com/${this.state.image}`}
+                    src={`http://fatcatimages.s3.amazonaws.com/${this.state.image}`}
                     alt="profile" style={{
                       display: "block",
                       margin: "5px auto",
@@ -297,7 +329,7 @@ export class MyAccount extends Component {
                     style={{ maxWidth: '1600px', width: '80%' }}
                   /> */}
                   <div style={{
-                    margin: "5px auto"
+                    margin: "5px "
                   }}>
                     <label id="same-line" style={{
                       marginRight: "5px"
@@ -305,7 +337,7 @@ export class MyAccount extends Component {
                     <label>{`  ${this.state.first_name}  ${this.state.last_name}`}</label>
                   </div>
                   <div style={{
-                    margin: "5px auto"
+                    margin: "5px "
                   }}>
                     <label id="same-line" style={{
                       marginRight: "5px"
@@ -324,58 +356,73 @@ export class MyAccount extends Component {
               borderRadius: "20px",
               boxShadow: "8px 8px 50px #000",
               color: "#6c757d",
-              height: "80%",
+              height: "70%",
               minWidth: "800px"
             }}>
-              <Card.Header as="h3">UPDATE PROFILE</Card.Header>
-              <Card.Body>
-                <Form>
-                  <div style={{
-                    display: "flex",
-                    width: "400px",
-                    margin: "5px auto",
-                    alignItems: "center"
-                  }}>
-                    <Form.Label style={{
-                      margin: "0 15px 0 32px"
-                    }}>FIRST NAME:</Form.Label>
-                    <Form.Control id="first-name" type="text" placeholder="ENTER FIRST NAME" style={{
-                      width: "230px"
-                    }} />
+              <Card.Header as="h3">UPDATE</Card.Header>
+              <Card.Body style={{
+                display: "flex",
+                marginTop: "30px"
+              }}>
+                <Form >
+                  <div style={{ borderRight: "2px solid black" }}>
+                    <h4 style={{ marginLeft: "8%" }} className="process_heading">Profile Information: </h4>
+                    <div style={{
+                      display: "flex",
+                      width: "400px",
+                      margin: "35px auto 15px auto",
+                      alignItems: "center"
+                    }}>
+                      <Form.Label style={{
+                        margin: "0 15px 0 32px"
+                      }}>FIRST NAME:</Form.Label>
+                      <Form.Control id="first-name" type="text" placeholder="ENTER FIRST NAME" style={{
+                        width: "230px"
+                      }} />
+                    </div>
+                    <div style={{ display: "flex", width: "400px", margin: "5px auto" }}>
+                      <Form.Label style={{
+                        margin: "0 15px 0 35px"
+                      }}>LAST NAME:</Form.Label>
+                      <Form.Control id="last-name" type="text" placeholder="ENTER LAST NAME" style={{
+                        width: "230px"
+                      }} />
+                    </div>
+                    <div style={{ display: "flex", width: "400px", margin: "15px auto" }}>
+                      <Form.Label style={{
+                        margin: "0 15px 0 28px"
+                      }}>HOMETOWN:</Form.Label>
+                      <Form.Control id="hometown" type="text" placeholder="ENTER HOMETOWN" style={{
+                        width: "230px"
+                      }} />
+                    </div>
+                    <div style={{ display: "flex" }}>
+                      <Button className="buttons" onClick={this.handleSubmit} variant="success" type="submit"
+                        style={{ margin: "15px auto" }}>
+                        UPDATE INFO</Button>
+                    </div>
                   </div>
-                  <div style={{ display: "flex", width: "400px", margin: "5px auto" }}>
-                    <Form.Label style={{
-                      margin: "0 15px 0 35px"
-                    }}>LAST NAME:</Form.Label>
-                    <Form.Control id="last-name" type="text" placeholder="ENTER LAST NAME" style={{
-                      width: "230px"
-                    }} />
-                  </div>
-                  <div style={{ display: "flex", width: "400px", margin: "5px auto" }}>
-                    <Form.Label style={{
-                      margin: "0 15px 0 28px"
-                    }}>HOMETOWN:</Form.Label>
-                    <Form.Control id="hometown" type="text" placeholder="ENTER HOMETOWN" style={{
-                      width: "230px"
-                    }} />
-                  </div>
-                  <div style={{ display: "flex" }}>
-                    <Button className="buttons" onClick={this.handleSubmit} variant="outline-success" type="submit"
-                      style={{ margin: "15px auto" }}>
-                      UPDATE</Button>
-                  </div>
+
                 </Form>
-                <form onSubmit={this.handleUpload}>
-                  <div className="form-group">
+
+                <form style={{ marginLeft: "5%" }} onSubmit={this.handleUpload}>
+                  <div className="form-group" style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignContent: "space-around"
+                  }}>
 
                     <h4 className="process_heading">Profile Image: </h4>
-                    <p className="process_details">Upload image from your local device</p>
+                    <p style={{ margin: "30px auto" }} className="process_details">Upload image from your local device</p>
 
-                    <input type="file" name="" id="" onChange={this.handleSelectedFile} />
+                    <input style={{ margin: "10px 8%" }} type="file" name="" id="" onChange={this.handleSelectedFile} />
                     {/* <img src={this.state.multerImage} alt="upload-image" className="process_image" /> */}
 
                   </div>
-                  <button className="btn btn-primary" type="submit">Update Photo</button>
+                  <div style={{ margin: "65px 15%" }}>
+                    <button className="btn btn-primary" type="submit">UPDATE PHOTO</button>
+                  </div>
+
                 </form>
 
 

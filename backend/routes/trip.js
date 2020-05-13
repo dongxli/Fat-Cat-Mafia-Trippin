@@ -92,6 +92,23 @@ TRIPROUTES.route("/trip/:id").put(function (req, res) {
   });
 });
 
+TRIPROUTES.route("/tripimage/:id").put(function (req, res) {
+  TRIP.updateOne(
+    { _id: req.params.id },
+    {
+      $set: {
+        trip_image: req.body.image
+      },
+    }
+  )
+    .then((response) => {
+      res.status(200).json({});
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 TRIPROUTES.route("/currentdatetrip/:id").get(function (req, res) {
   TRIP.find({ owner_id: req.params.id, start_date: { $gte: new Date() } })
     .sort({ start_date: 1 })
@@ -136,6 +153,8 @@ TRIPROUTES.route("/trip/:id").delete(function (req, res) {
     }
   });
 });
+
+
 
 // add a location to user's list
 TRIPROUTES.route("/trip/addtotriplocation").post(function (req, res) {

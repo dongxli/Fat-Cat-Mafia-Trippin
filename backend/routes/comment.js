@@ -66,6 +66,25 @@ COMMENTROUTES.route("/comment/:_id").put(function (req, res) {
         })
 })
 
+COMMENTROUTES.route("/comment/images/:id").put(function (req, res) {
+    COMMENT.find(
+        { owner_id: req.params.id },
+        {
+            $set: { user_pic: req.body.image }
+        }
+    )
+        .then(response => {
+            res.status(200).json({
+
+            });
+            console.log(response);
+        }).catch(err => {
+            console.log(err);
+        })
+});
+
+
+
 COMMENTROUTES.route("/comment").get(function (req, res) {
     COMMENT.find(function (err, comment) {
         if (err) {
